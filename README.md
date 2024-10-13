@@ -262,6 +262,6 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-Tessy Achieng - [email address](mailto:tessyachieng17@gmail.com)
+Tessy Achieng - [tessyachieng17@gmail.com](mailto:tessyachieng17@gmail.com)
 
 Project Link: [https://github.com/tessie17/afida-backend](https://github.com/tessie17/afida-backend)
