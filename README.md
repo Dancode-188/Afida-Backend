@@ -50,6 +50,8 @@ AFIDA Backend is a robust Node.js server application designed to support a block
 
 - MongoDB integration for data persistence
 
+- Flexible project categorization with case-insensitive handling
+
 ## Technologies
 
 - Node.js
@@ -128,6 +130,14 @@ Adjust the values according to your development environment.
 
 After starting the server, the API will be available at `http://localhost:5000` (or the port specified in your .env file).
 
+When creating or querying projects, keep in mind:
+
+- Project categories are case-insensitive. "Technology", "TECHNOLOGY", and "technology" are treated the same.
+
+- Categories must be between 2 and 50 characters long.
+
+- When retrieving projects, categories will always be in lowercase.
+
 ## API Endpoints
 
 ### Users
@@ -142,11 +152,15 @@ After starting the server, the API will be available at `http://localhost:5000` 
 
 ### Projects
 
-- POST `/api/projects`: Create a new project (requires authentication)
+- POST /api/projects: Create a new project (requires authentication)
 
-- Body: `{ name, description, category, targetAmount }`
+    - Body: `{ name, description, category, targetAmount }`
+
+    - Note: The category is case-insensitive and will be stored in lowercase
 
 - GET `/api/projects`: Retrieve all projects
+
+    - Note: Project categories are returned in lowercase
 
 ### Contributions
 
@@ -180,7 +194,7 @@ Authenticated routes require a `Bearer` token in the `Authorization` header.
 
 - description: String (required)
 
-- category: String (enum: ["Technology", "Art", "Science", "Other"])
+- category: String (required, min length: 2, max length: 50, stored as lowercase)
 
 - targetAmount: Number (required, min: 1)
 
@@ -248,6 +262,6 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-Tessy Achieng - tessyachieng17@gmail.com
+Tessy Achieng - [email address](mailto:tessyachieng17@gmail.com)
 
 Project Link: [https://github.com/tessie17/afida-backend](https://github.com/tessie17/afida-backend)

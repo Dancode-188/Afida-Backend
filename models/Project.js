@@ -12,10 +12,9 @@ const ProjectSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: {
-      values: ["Technology", "Art", "Science", "Other"],
-      message: "{VALUE} is not a valid category",
-    },
+    minlength: [2, "Category must be at least 2 characters long"],
+    maxlength: [50, "Category cannot exceed 50 characters"],
+    set: (v) => v.toLowerCase(),
   },
   date: {
     type: Date,
@@ -31,6 +30,13 @@ const ProjectSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+});
+
+ProjectSchema.pre("save", function (next) {
+  if (this.isModified("category")) {
+    this.category = this.category.toLowerCase();
+  }
+  next();
 });
 
 module.exports = mongoose.model("Project", ProjectSchema);

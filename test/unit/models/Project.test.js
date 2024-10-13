@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const Project = require("../../../models/Project");
 
 describe("Project Model", () => {
-
   beforeEach(async () => {
     await Project.deleteMany({});
   });
@@ -20,7 +19,7 @@ describe("Project Model", () => {
     expect(savedProject._id).toBeDefined();
     expect(savedProject.name).toBe(validProject.name);
     expect(savedProject.description).toBe(validProject.description);
-    expect(savedProject.category).toBe(validProject.category);
+    expect(savedProject.category).toBe(validProject.category.toLowerCase());
     expect(savedProject.targetAmount).toBe(validProject.targetAmount);
     expect(savedProject.organizer).toEqual(validProject.organizer);
   });
@@ -73,11 +72,41 @@ describe("Project Model", () => {
     expect(savedProject.date instanceof Date).toBe(true);
   });
 
-  it("should fail to save project with invalid category", async () => {
+  it("should convert category to lowercase", async () => {
+    const project = new Project({
+      name: "Test Project",
+      description: "A test project description",
+      category: "TECHNOLOGY",
+      targetAmount: 10000,
+      organizer: new mongoose.Types.ObjectId(),
+    });
+    const savedProject = await project.save();
+    expect(savedProject.category).toBe("technology");
+  });
+
+  it("should fail to save project with category shorter than 2 characters", async () => {
     const invalidProject = new Project({
       name: "Invalid Project",
       description: "A test project description",
-      category: "InvalidCategory",
+      category: "A",
+      targetAmount: 10000,
+      organizer: new mongoose.Types.ObjectId(),
+    });
+    let err;
+    try {
+      await invalidProject.save();
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
+    expect(err.errors.category).toBeDefined();
+  });
+
+  it("should fail to save project with category longer than 50 characters", async () => {
+    const invalidProject = new Project({
+      name: "Invalid Project",
+      description: "A test project description",
+      category: "A".repeat(51),
       targetAmount: 10000,
       organizer: new mongoose.Types.ObjectId(),
     });
