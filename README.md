@@ -226,21 +226,68 @@ npm test
 
 Note: Integration and E2E tests are currently disabled due to setup issues. They will be re-implemented in future updates.
 
+
 ## Deployment
 
-For deployment, ensure you set the appropriate environment variables for your production environment. It's recommended to use a process manager like PM2 for running the Node.js application in production.
+The AFIDA backend is currently deployed on Heroku. Follow these steps to deploy your own instance or update the existing deployment:
 
-Example deployment steps:
+1. Ensure you have the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed and are logged in.
 
-1. Set up your production MongoDB instance.
+2. If you haven't already, create a new Heroku app:
 
-2. Configure environment variables on your server.
+```
 
-3. Clone the repository on your server.
+heroku create your-app-name
 
-4. Install dependencies: `npm install --production`
+```
 
-5. Start the application: `npm start` (or use PM2: `pm2 start server.js`)
+3. Set up the necessary environment variables on Heroku:
+
+```
+
+heroku config:set MONGO_URI=your_production_mongoDB_URI
+
+heroku config:set TOKEN_SECRET=your_production_jwt_secret
+
+# Set any other necessary environment variables
+
+```
+
+4. Push your code to Heroku:
+
+```
+
+git push heroku main
+
+```
+
+5. Ensure at least one dyno is running:
+
+```
+
+heroku ps:scale web=1
+
+```
+
+6. Open your deployed app:
+
+```
+
+heroku open
+
+```
+
+To view logs and troubleshoot any issues:
+
+```
+
+heroku logs --tail
+
+```
+
+Remember to update your frontend application to use the new Heroku URL for API requests.
+
+For any deployment-related issues or questions, please contact the project maintainer.
 
 ## Contributing
 
